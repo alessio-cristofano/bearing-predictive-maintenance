@@ -1,2 +1,8 @@
 venv/
 .env
+# Python build and packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+**/__pycache__/
