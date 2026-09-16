@@ -1,7 +1,0 @@
-Metadata-Version: 2.4
-Name: bearing_pipeline
-Version: 0.1.0
-Requires-Dist: polars
-Requires-Dist: pyarrow
-Requires-Dist: duckdb
-Requires-Dist: kagglehub
