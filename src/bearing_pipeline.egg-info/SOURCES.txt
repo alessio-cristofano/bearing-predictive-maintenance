@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+src/__init__.py
+src/bearing_pipeline.egg-info/PKG-INFO
+src/bearing_pipeline.egg-info/SOURCES.txt
+src/bearing_pipeline.egg-info/dependency_links.txt
+src/bearing_pipeline.egg-info/requires.txt
+src/bearing_pipeline.egg-info/top_level.txt
+src/features/__init__.py
+src/ingestion/__init__.py
+src/ingestion/download.py
+src/ingestion/main.py
+src/ingestion/raw_loader.py
+src/schemas/__init__.py
+src/schemas/dataset_specs.py
