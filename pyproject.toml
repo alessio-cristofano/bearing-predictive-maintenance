@@ -14,3 +14,9 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.ruff.lint]
+ignore = [
+    "DTZ001",  # datetime.datetime() called without a tzinfo argument
+    "DTZ007",  # Naive datetime constructed using datetime.strptime() without %z
+]
