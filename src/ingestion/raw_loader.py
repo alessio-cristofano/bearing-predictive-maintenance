@@ -1,6 +1,7 @@
 from datetime import datetime
 import polars as pl
-from schemas.dataset_specs import SPECS
+from schemas.dataset_specs import SPECS, DatasetSpec
+from pathlib import Path
 
 
 def parse_filename_timestamp(filename: str) -> datetime:
@@ -8,16 +9,16 @@ def parse_filename_timestamp(filename: str) -> datetime:
     return datetime.strptime(filename, "%Y.%m.%d.%H.%M.%S")
 
 
-def load_snapshot(file_path: str, dataset_id: int) -> pl.DataFrame:
+def load_snapshot(file_path: Path, dataset_id: int) -> pl.DataFrame:
     """
     Loads a single 20,480-row IMS ASCII snapshot and attaches metadata.
     """
-    spec = SPECS[dataset_id]
-    filename = file_path.split("/")[-1]
-    ts = parse_filename_timestamp(filename)
+    spec: DatasetSpec = SPECS[dataset_id]
+    filename: str = file_path.name
+    ts: datetime = parse_filename_timestamp(filename)
 
     # Files are tab-separated or space-separated ASCII without headers
-    df = pl.read_csv(
+    df: pl.DataFrame = pl.read_csv(
         file_path,
         separator="\t",
         has_header=False,
