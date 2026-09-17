@@ -1,12 +1,12 @@
-bearing_pipeline @ file:///home/alessio/Desktop/File/coding/data-engineering/bearing-predictive-maintenance
+-e git+ssh://git@github.com/alessio-cristofano/bearing-predictive-maintenance.git@a53a5bfaefe06550ff9c40cb58282d8ec41e06c4#egg=bearing_pipeline
 certifi==2026.7.22
 charset-normalizer==3.5.1
 dotenv==0.9.9
 duckdb==1.5.5
-e==1.4.5
 idna==3.19
 kagglehub==1.0.2
-kagglesdk==0.1.37
+kagglesdk==0.1.28
+numpy==2.2.6
 packaging==26.3
 polars==1.44.2
 polars-runtime-32==1.44.2
