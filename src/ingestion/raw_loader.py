@@ -1,7 +1,9 @@
 from datetime import datetime
-import polars as pl
-from schemas.dataset_specs import SPECS, DatasetSpec
 from pathlib import Path
+
+import polars as pl
+
+from schemas.dataset_specs import SPECS, DatasetSpec
 
 
 def parse_filename_timestamp(filename: str) -> datetime:

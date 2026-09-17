@@ -1,5 +1,7 @@
-import polars as pl
 from pathlib import Path
+
+import polars as pl
+
 from schemas.dataset_specs import SPECS
 
 

@@ -1,7 +1,8 @@
-from pathlib import Path
-from ingestion.bronze_pipeline import bronze_pipeline
-from features.silver_pipeline import silver_pipeline
 import time
+from pathlib import Path
+
+from features.silver_pipeline import silver_pipeline
+from ingestion.bronze_pipeline import bronze_pipeline
 
 DATASET_MAPPING: list[dict] = [
     {"relative_path": "1st_test/1st_test", "id": 1},
@@ -30,4 +31,6 @@ if not path_to_silver_data.exists():
 else:
     print("Skipping silver layer ingestion: parquet file already exists")
 
-print(f"Time to execute bronze + silver pipelines: {(time_bronze + time_silver):2.2f} s")
+print(
+    f"Time to execute bronze + silver pipelines: {(time_bronze + time_silver):2.2f} s"
+)

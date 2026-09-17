@@ -1,11 +1,11 @@
 from dataclasses import dataclass
-from typing import List, ClassVar
+from typing import ClassVar
 
 
 @dataclass(frozen=True)
 class DatasetSpec:
     dataset_id: int
-    column_names: List[str]
+    column_names: list[str]
     expected_rows: ClassVar[int] = 20480
 
     @classmethod

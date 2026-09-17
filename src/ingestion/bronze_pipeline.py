@@ -1,17 +1,18 @@
 import os
 import sys
-from dotenv import load_dotenv
-import polars as pl
-from ingestion.raw_loader import load_snapshot
-from ingestion.download import download
 from pathlib import Path
-from schemas.dataset_specs import DatasetSpec
+
 import numpy as np
+import polars as pl
+from dotenv import load_dotenv
+
+from ingestion.download import download
+from ingestion.raw_loader import load_snapshot
+from schemas.dataset_specs import DatasetSpec
 
 
 def bronze_pipeline(mapping: list[dict], id: int):
     dataset: dict = next(d for d in mapping if d["id"] == id)
-    #
     load_dotenv()
     data_path: Path = Path(os.getenv("DATA_PATH"))
 

@@ -1,5 +1,7 @@
-import duckdb
 from pathlib import Path
+
+import duckdb
+
 from schemas.dataset_specs import SPECS
 
 TARGET_ID = 2
