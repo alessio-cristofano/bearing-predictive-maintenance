@@ -1,12 +1,17 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, ClassVar
 
 
 @dataclass(frozen=True)
 class DatasetSpec:
     dataset_id: int
     column_names: List[str]
-    expected_rows: int = 20480
+    expected_rows: ClassVar[int] = 20480
+
+    @classmethod
+    def get_rows(cls) -> int:
+        """Returns the expected number of rows for any dataset snapshot"""
+        return cls.expected_rows
 
 
 SPECS = {
