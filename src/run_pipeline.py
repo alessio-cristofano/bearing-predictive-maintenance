@@ -1,8 +1,8 @@
 import time
 from pathlib import Path
 
-from features.silver_pipeline import silver_pipeline
-from ingestion.bronze_pipeline import bronze_pipeline
+from src.features.silver_pipeline import silver_pipeline
+from src.ingestion.bronze_pipeline import bronze_pipeline
 
 DATASET_MAPPING: list[dict] = [
     {"relative_path": "1st_test/1st_test", "id": 1},

@@ -5,8 +5,8 @@ from random import random
 import polars as pl
 import pytest
 
-from ingestion.raw_loader import load_snapshot, parse_filename_timestamp
-from schemas.dataset_specs import SPECS, DatasetSpec
+from src.ingestion.raw_loader import load_snapshot, parse_filename_timestamp
+from src.schemas.dataset_specs import SPECS, DatasetSpec
 
 VALID_TIMESTAMP_SAMPLES = [
     ("2000.12.30.08.30.21", datetime(2000, 12, 30, 8, 30, 21)),

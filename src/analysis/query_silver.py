@@ -2,12 +2,14 @@ from pathlib import Path
 
 import duckdb
 
-from schemas.dataset_specs import SPECS
+from src.schemas.dataset_specs import SPECS
 
 TARGET_ID = 2
 path_to_silver_data: Path = Path(f"./data/silver/set{TARGET_ID}_silver.parquet")
 if not path_to_silver_data.exists():
-    raise FileNotFoundError(f"{path_to_silver_data.name}: Provided path does not exists")
+    raise FileNotFoundError(
+        f"{path_to_silver_data.name}: Provided path does not exists"
+    )
 
 data_columns: list[str] = SPECS.get(TARGET_ID).column_names
 
@@ -18,7 +20,5 @@ QUERY_PAYLOAD: str = ",".join(
 QUERY: str = f"""SELECT {QUERY_PAYLOAD} FROM '{path_to_silver_data}'"""
 duckdb.sql(QUERY).show()
 
-QUERY: str = (
-    f"""SELECT snapshot_timestamp,b1_rms FROM '{path_to_silver_data}' ORDER BY b1_rms DESC LIMIT 5"""
-)
+QUERY: str = f"""SELECT snapshot_timestamp,b1_rms FROM '{path_to_silver_data}' ORDER BY b1_rms DESC LIMIT 5"""
 duckdb.sql(QUERY).show()

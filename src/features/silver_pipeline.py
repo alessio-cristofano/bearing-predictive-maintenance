@@ -2,7 +2,7 @@ from pathlib import Path
 
 import polars as pl
 
-from schemas.dataset_specs import SPECS
+from src.schemas.dataset_specs import SPECS
 
 
 def silver_pipeline(id: int):
@@ -33,7 +33,9 @@ def silver_pipeline(id: int):
                 pl.count(column).name.suffix("_count"),
             ]
         )
-    silver_data: pl.DataFrame = bronze_data.group_by("snapshot_timestamp").agg(aggr_exprs)
+    silver_data: pl.DataFrame = bronze_data.group_by("snapshot_timestamp").agg(
+        aggr_exprs
+    )
 
     print(f"Rows of the silver dataset: {silver_data.height}")
     path_to_silver_data: Path = Path(f"./data/silver/set{id}_silver.parquet")

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import polars as pl
 
-from schemas.dataset_specs import SPECS, DatasetSpec
+from src.schemas.dataset_specs import SPECS, DatasetSpec
 
 
 def parse_filename_timestamp(filename: str) -> datetime:
@@ -29,7 +29,9 @@ def load_snapshot(file_path: Path, dataset_id: int) -> pl.DataFrame:
     )
 
     if df.height != spec.expected_rows:
-        raise ValueError(f"{filename}: Expected {spec.expected_rows} rows, got {df.height}")
+        raise ValueError(
+            f"{filename}: Expected {spec.expected_rows} rows, got {df.height}"
+        )
 
     return df.with_columns(
         pl.lit(ts).alias("snapshot_timestamp"),

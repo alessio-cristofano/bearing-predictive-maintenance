@@ -6,9 +6,9 @@ import numpy as np
 import polars as pl
 from dotenv import load_dotenv
 
-from ingestion.download import download
-from ingestion.raw_loader import load_snapshot
-from schemas.dataset_specs import DatasetSpec
+from src.ingestion.download import download
+from src.ingestion.raw_loader import load_snapshot
+from src.schemas.dataset_specs import DatasetSpec
 
 
 def bronze_pipeline(mapping: list[dict], id: int):
@@ -23,7 +23,9 @@ def bronze_pipeline(mapping: list[dict], id: int):
         sys.exit("No Data Path found")
 
     files: list[Path] = [
-        f for f in (data_path / dataset.get("relative_path")).iterdir() if not f.is_dir()
+        f
+        for f in (data_path / dataset.get("relative_path")).iterdir()
+        if not f.is_dir()
     ]
     sizes: np.ndarray = np.array(
         [
