@@ -1,4 +1,4 @@
--e git+ssh://git@github.com/alessio-cristofano/bearing-predictive-maintenance.git@a53a5bfaefe06550ff9c40cb58282d8ec41e06c4#egg=bearing_pipeline
+-e git+ssh://git@github.com/alessio-cristofano/bearing-predictive-maintenance.git@4d6bcde8bac764b45f622d331a8f9e6c680c1892#egg=bearing_pipeline
 certifi==2026.7.22
 charset-normalizer==3.5.1
 dotenv==0.9.9
