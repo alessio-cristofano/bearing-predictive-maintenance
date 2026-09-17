@@ -1,3 +1,4 @@
+import logging
 import time
 from pathlib import Path
 
@@ -14,6 +15,13 @@ DATASET_MAPPING: list[dict] = [
         "id": 3,
     },  # different folder structure in original 3rd dataset
 ]
+# Configure Logger
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+logger = logging.getLogger(__name__)
 
 
 @click.command()
@@ -40,17 +48,17 @@ def run_pipeline(dataset_id: int = 2) -> None:
         bronze_pipeline(DATASET_MAPPING, dataset_id)
         time_bronze = time.time() - start_time_bronze
     else:
-        print("Skipping bronze layer ingestion: parquet file already exists")
+        logger.info("Skipping bronze layer ingestion: parquet file already exists")
 
     if not path_to_silver_data.exists():
         start_time_silver: float = time.time()
         silver_pipeline(dataset_id)
         time_silver = time.time() - start_time_silver
     else:
-        print("Skipping silver layer ingestion: parquet file already exists")
+        logger.info("Skipping silver layer ingestion: parquet file already exists")
 
-    print(
-        f"Time to execute bronze + silver pipelines: {(time_bronze + time_silver):2.2f} s"
+    logger.info(
+        "Time to execute bronze + silver pipelines: %2.2f s", time_bronze + time_silver
     )
 
 

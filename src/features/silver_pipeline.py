@@ -1,8 +1,11 @@
+import logging
 from pathlib import Path
 
 import polars as pl
 
 from src.schemas.dataset_specs import SPECS
+
+logger = logging.getLogger(__name__)
 
 
 def silver_pipeline(id: int):
@@ -37,6 +40,6 @@ def silver_pipeline(id: int):
         aggr_exprs
     )
 
-    print(f"Rows of the silver dataset: {silver_data.height}")
+    logger.info("Rows of the silver dataset: %s", silver_data.height)
     path_to_silver_data: Path = Path(f"./data/silver/set{id}_silver.parquet")
     silver_data.write_parquet(path_to_silver_data)

@@ -1,3 +1,4 @@
+import logging
 import os
 import sys
 from pathlib import Path
@@ -9,6 +10,8 @@ from dotenv import load_dotenv
 from src.ingestion.download import download
 from src.ingestion.raw_loader import load_snapshot
 from src.schemas.dataset_specs import DatasetSpec
+
+logger = logging.getLogger(__name__)
 
 
 def bronze_pipeline(mapping: list[dict], id: int):
@@ -46,5 +49,5 @@ def bronze_pipeline(mapping: list[dict], id: int):
     path_to_bronze_data: Path = Path(f"./data/bronze/set{id}_bronze.parquet")
     merged_files.write_parquet(path_to_bronze_data)
 
-    print(f"Size of parquet file: {os.path.getsize(path_to_bronze_data)}")
-    print(f"Size of raw dataset files: {sizes.sum()}")
+    logger.info("Size of parquet file: %s", os.path.getsize(path_to_bronze_data))
+    logger.info("Size of raw dataset files: %s", sizes.sum())
