@@ -1,4 +1,3 @@
-import sys
 import time
 from pathlib import Path
 
@@ -56,8 +55,4 @@ def run_pipeline(dataset_id: int = 2) -> None:
 
 
 if __name__ == "__main__":
-    try:
-        run_pipeline()
-    except Exception as exc:
-        print(f"Pipeline failed: {exc}", file=sys.stderr)
-        sys.exit(1)
+    run_pipeline()
