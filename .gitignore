@@ -7,3 +7,4 @@ dist/
 .eggs/
 **/__pycache__/
 *.parquet
+.vscode/
