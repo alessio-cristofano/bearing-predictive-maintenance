@@ -16,6 +16,41 @@ from src.schemas.dataset_specs import DatasetSpec
 logger = logging.getLogger(__name__)
 
 
+def validate_snapshot(
+    df: pl.DataFrame, expected_cols: int, expected_rows: int = 20480
+) -> None:
+    """Enforce data contracts based on physical sensor constraints.
+
+    Args:
+        df (pl.DataFrame): dataframe containing bronze data.
+        expected_cols (int): Expected number of column (4 or 8).
+        expected_rows (int): Expected number of rows (20480).
+
+    Raises:
+        ValueError:
+            - df has at least one null value
+            - df has not the expected number of columns or rows
+    """
+    # 1. Enforce Exact Snapshot Duration
+    if df.height != expected_rows:
+        raise ValueError(
+            f"Data contract violation: Expected {expected_rows} rows, got {df.height}."
+        )
+
+    # 2. Enforce Sensor Channel Count
+    if df.width != expected_cols:
+        raise ValueError(
+            f"Schema violation: Expected {expected_cols} columns, got {df.width}."
+        )
+
+    # 3. Enforce Signal Continuity (No dropped packets)
+    null_counts = df.null_count().sum(axis=1).item()
+    if null_counts > 0:
+        raise ValueError(
+            f"Signal corruption: Found {null_counts} NULL values in snapshot."
+        )
+
+
 def bronze_pipeline(config: dict[str, dict], dataset_id: int) -> None:
     """Orchestrates the ingestion of raw IMS bearing data into Parquet format.
 
@@ -31,6 +66,7 @@ def bronze_pipeline(config: dict[str, dict], dataset_id: int) -> None:
         ValueError: If the dataset_id is not found in the mapping.
     """
     dataset: dict = config.get("datasets").get(dataset_id)
+    expected_columns: int = dataset.get("channels") + 2  # two metadata columns added
     load_dotenv()
     data_path: Path = Path(os.getenv("DATA_PATH"))
 
@@ -54,7 +90,9 @@ def bronze_pipeline(config: dict[str, dict], dataset_id: int) -> None:
     )
     single_files: list[pl.DataFrame] = []
     for f in files:
-        single_files.append(load_snapshot(f, dataset_id))
+        snapshot: pl.DataFrame = load_snapshot(f, dataset_id)
+        validate_snapshot(snapshot, expected_columns)
+        single_files.append(snapshot)
     merged_files = pl.concat(single_files)
 
     # Check that the concatenation worked
