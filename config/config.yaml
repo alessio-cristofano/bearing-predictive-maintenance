@@ -1,10 +1,11 @@
+data_path: "./data/raw"
 datasets:
   1:
-    relative_path: "1st_test/1st_test"
+    relative_path: "1/1st_test/1st_test"
     channels: 8
   2:
-    relative_path: "2nd_test/2nd_test"
+    relative_path: "1/2nd_test/2nd_test"
     channels: 4
   3:
-    relative_path: "3rd_test/4th_test"
+    relative_path: "1/3rd_test/4th_test/txt"
     channels: 4

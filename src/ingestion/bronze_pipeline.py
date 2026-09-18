@@ -7,7 +7,6 @@ from pathlib import Path
 
 import numpy as np
 import polars as pl
-from dotenv import load_dotenv
 
 from src.ingestion.download import download
 from src.ingestion.raw_loader import load_snapshot
@@ -44,7 +43,7 @@ def validate_snapshot(
         )
 
     # 3. Enforce Signal Continuity (No dropped packets)
-    null_counts = df.null_count().sum(axis=1).item()
+    null_counts = df.null_count().sum_horizontal().item()
     if null_counts > 0:
         raise ValueError(
             f"Signal corruption: Found {null_counts} NULL values in snapshot."
@@ -67,14 +66,11 @@ def bronze_pipeline(config: dict[str, dict], dataset_id: int) -> None:
     """
     dataset: dict = config.get("datasets").get(dataset_id)
     expected_columns: int = dataset.get("channels") + 2  # two metadata columns added
-    load_dotenv()
-    data_path: Path = Path(os.getenv("DATA_PATH"))
+    data_path: Path = Path(config.get("data_path"))
 
     if not data_path.exists() or not any(data_path.iterdir()):
-        data_path = download()
-
-    if data_path is None:
-        sys.exit("No Data Path found")
+        logger.info("Data not found at %s. Initiating download...", data_path)
+        download(data_path)
 
     files: list[Path] = [
         f
