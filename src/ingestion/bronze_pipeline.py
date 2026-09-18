@@ -16,7 +16,7 @@ from src.schemas.dataset_specs import DatasetSpec
 logger = logging.getLogger(__name__)
 
 
-def bronze_pipeline(mapping: list[dict], dataset_id: int) -> None:
+def bronze_pipeline(config: dict[str, dict], dataset_id: int) -> None:
     """Orchestrates the ingestion of raw IMS bearing data into Parquet format.
 
     Parses raw ASCII files containing 20kHz vibration snapshots, dynamically
@@ -24,13 +24,13 @@ def bronze_pipeline(mapping: list[dict], dataset_id: int) -> None:
     and writes the compressed output to the Bronze layer (data/bronze/).
 
     Args:
-        mapping (list[dict]): Configuration mapping containing relative paths.
+        config (dict[str,dict]): Configuration mapping containing relative paths.
         dataset_id (int): Target dataset identifier (1, 2, or 3).
 
     Raises:
         ValueError: If the dataset_id is not found in the mapping.
     """
-    dataset: dict = next(d for d in mapping if d["id"] == dataset_id)
+    dataset: dict = config.get("datasets").get(dataset_id)
     load_dotenv()
     data_path: Path = Path(os.getenv("DATA_PATH"))
 
@@ -54,7 +54,7 @@ def bronze_pipeline(mapping: list[dict], dataset_id: int) -> None:
     )
     single_files: list[pl.DataFrame] = []
     for f in files:
-        single_files.append(load_snapshot(f, dataset.get("id")))
+        single_files.append(load_snapshot(f, dataset_id))
     merged_files = pl.concat(single_files)
 
     # Check that the concatenation worked

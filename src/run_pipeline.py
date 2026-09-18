@@ -5,18 +5,14 @@ import time
 from pathlib import Path
 
 import click
+import yaml
 
 from src.features.silver_pipeline import silver_pipeline
 from src.ingestion.bronze_pipeline import bronze_pipeline
 
-DATASET_MAPPING: list[dict] = [
-    {"relative_path": "1st_test/1st_test", "id": 1},
-    {"relative_path": "2nd_test/2nd_test", "id": 2},
-    {
-        "relative_path": "3rd_test/4th_test/txt",
-        "id": 3,
-    },  # different folder structure in original 3rd dataset
-]
+with open("config/config.yaml") as config_file:
+    config: dict[str, dict] = yaml.safe_load(config_file)
+
 # Configure Logger
 logging.basicConfig(
     level=logging.INFO,
@@ -55,7 +51,7 @@ def run_pipeline(dataset_id: int = 2) -> None:
     time_silver: float = 0
     if not path_to_bronze_data.exists():
         start_time_bronze: float = time.time()
-        bronze_pipeline(DATASET_MAPPING, dataset_id)
+        bronze_pipeline(config, dataset_id)
         time_bronze = time.time() - start_time_bronze
     else:
         logger.info("Skipping bronze layer ingestion: parquet file already exists")
