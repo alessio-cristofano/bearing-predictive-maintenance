@@ -1,3 +1,5 @@
+"""Bronze layer data ingestion for the Bearings Predictive Maintenance pipeline."""
+
 import logging
 import os
 import sys
@@ -14,8 +16,21 @@ from src.schemas.dataset_specs import DatasetSpec
 logger = logging.getLogger(__name__)
 
 
-def bronze_pipeline(mapping: list[dict], id: int):
-    dataset: dict = next(d for d in mapping if d["id"] == id)
+def bronze_pipeline(mapping: list[dict], dataset_id: int) -> None:
+    """Orchestrates the ingestion of raw IMS bearing data into Parquet format.
+
+    Parses raw ASCII files containing 20kHz vibration snapshots, dynamically
+    maps column headers based on the sensor configuration (4 or 8 channels),
+    and writes the compressed output to the Bronze layer (data/bronze/).
+
+    Args:
+        mapping (list[dict]): Configuration mapping containing relative paths.
+        dataset_id (int): Target dataset identifier (1, 2, or 3).
+
+    Raises:
+        ValueError: If the dataset_id is not found in the mapping.
+    """
+    dataset: dict = next(d for d in mapping if d["id"] == dataset_id)
     load_dotenv()
     data_path: Path = Path(os.getenv("DATA_PATH"))
 
@@ -46,7 +61,7 @@ def bronze_pipeline(mapping: list[dict], id: int):
     if merged_files.height != len(single_files) * DatasetSpec.get_rows():
         sys.exit("Loss of data during dataframe concatenation")
 
-    path_to_bronze_data: Path = Path(f"./data/bronze/set{id}_bronze.parquet")
+    path_to_bronze_data: Path = Path(f"./data/bronze/set{dataset_id}_bronze.parquet")
     merged_files.write_parquet(path_to_bronze_data)
 
     logger.info("Size of parquet file: %s", os.path.getsize(path_to_bronze_data))

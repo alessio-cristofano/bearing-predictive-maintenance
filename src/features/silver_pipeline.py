@@ -1,3 +1,5 @@
+"""Silver layer data transformation for the Bearings Predictive Maintenance pipeline."""
+
 import logging
 from pathlib import Path
 
@@ -8,19 +10,25 @@ from src.schemas.dataset_specs import SPECS
 logger = logging.getLogger(__name__)
 
 
-def silver_pipeline(id: int):
-    path_to_bronze_data: Path = Path(f"./data/bronze/set{id}_bronze.parquet")
+def silver_pipeline(dataset_id: int) -> None:
+    """Orchestrates the transformation of bronze data into silver level features.
+
+    Parses polar dataframe from the bronze layer containing the target dataset id,
+    computes features for each 1 second slice and writes the output to the Silver
+    layer (data/silver/) in Parquet file format.
+    The computed features are the following:
+    - Mean
+    - Standard Deviation
+    - RMS
+    - Peak-to-Peak
+    - Kurtosis
+
+    Args:
+        dataset_id (int): Target dataset identifier (1, 2, or 3).
+    """
+    path_to_bronze_data: Path = Path(f"./data/bronze/set{dataset_id}_bronze.parquet")
     bronze_data: pl.DataFrame = pl.read_parquet(path_to_bronze_data)
-
-    # Group by snapshot timestamp (1 second) and compute relevant metrics
-    ## Metrics to compute:
-    # Mean
-    # Standard Deviation
-    # RMS
-    # Peak-to-Peak
-    # Kurtosis
-
-    data_columns: list[str] = SPECS.get(id).column_names
+    data_columns: list[str] = SPECS.get(dataset_id).column_names
     aggr_exprs: list[pl.Expr] = []
 
     for column in data_columns:
@@ -41,5 +49,5 @@ def silver_pipeline(id: int):
     )
 
     logger.info("Rows of the silver dataset: %s", silver_data.height)
-    path_to_silver_data: Path = Path(f"./data/silver/set{id}_silver.parquet")
+    path_to_silver_data: Path = Path(f"./data/silver/set{dataset_id}_silver.parquet")
     silver_data.write_parquet(path_to_silver_data)

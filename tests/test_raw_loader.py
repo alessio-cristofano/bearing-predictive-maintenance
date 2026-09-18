@@ -1,3 +1,5 @@
+"""Test Module for bronze layer ingestion."""
+
 from datetime import datetime
 from pathlib import Path
 from random import random
@@ -47,7 +49,6 @@ def create_synthetic_dataset(m: int, n: int, filename: str):
 def test_load_snapshot(
     test_id: int, tmp_path: Path
 ):  # Usage of tmp_path does not require manual clean up
-    """Test that load_snapshot loads the correct number of rows and correct column names"""
     test_height: int = 20480
     spec: DatasetSpec = SPECS[test_id]
     test_file_path: str = tmp_path / "2004.02.12.10.32.39"

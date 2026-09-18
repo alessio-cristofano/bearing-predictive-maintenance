@@ -1,3 +1,5 @@
+"""Raw Loader module from raw ASCII file to in-memory polars DataFrames."""
+
 from datetime import datetime
 from pathlib import Path
 
@@ -12,8 +14,18 @@ def parse_filename_timestamp(filename: str) -> datetime:
 
 
 def load_snapshot(file_path: Path, dataset_id: int) -> pl.DataFrame:
-    """
-    Loads a single 20,480-row IMS ASCII snapshot and attaches metadata.
+    """Loads a single 20,480-row IMS ASCII snapshot and attaches metadata.
+
+    Two columns are added as metadata:
+    - snapshot_timestamp: timestamp of the data (derived from filename)
+    - sample_index: internal sequential integer index
+
+    Args:
+        file_path (Path): the path to the dataset.
+        dataset_id (int): the ID of the dataset to analyse.
+
+    Returns:
+        polars DataFrame representation of the dataset + metadata
     """
     spec: DatasetSpec = SPECS[dataset_id]
     filename: str = file_path.name

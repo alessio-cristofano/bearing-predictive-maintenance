@@ -1,3 +1,5 @@
+"""Queries to analyse the Silver layer parquet file."""
+
 from pathlib import Path
 
 import duckdb
@@ -17,8 +19,9 @@ TARGET_METRIC: str = "rms"
 QUERY_PAYLOAD: str = ",".join(
     [f"max({col}_{TARGET_METRIC}) AS max_{col}_{TARGET_METRIC}" for col in data_columns]
 )
-QUERY: str = f"""SELECT {QUERY_PAYLOAD} FROM '{path_to_silver_data}'"""
-duckdb.sql(QUERY).show()
+QUERY_MAX_VALUES: str = f"""SELECT {QUERY_PAYLOAD} FROM '{path_to_silver_data}'"""
+duckdb.sql(QUERY_MAX_VALUES).show()
 
-QUERY: str = f"""SELECT snapshot_timestamp,b1_rms FROM '{path_to_silver_data}' ORDER BY b1_rms DESC LIMIT 5"""
-duckdb.sql(QUERY).show()
+QUERY_MAX_B1RMS: str = f"""SELECT snapshot_timestamp,b1_rms FROM '{path_to_silver_data}'
+                 ORDER BY b1_rms DESC LIMIT 5"""
+duckdb.sql(QUERY_MAX_B1RMS).show()

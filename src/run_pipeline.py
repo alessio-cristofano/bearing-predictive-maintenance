@@ -1,3 +1,5 @@
+"""Main module to run the entire pipeline."""
+
 import logging
 import time
 from pathlib import Path
@@ -34,6 +36,14 @@ logger = logging.getLogger(__name__)
     help="Target IMS Dataset to process",
 )
 def run_pipeline(dataset_id: int = 2) -> None:
+    """Orchestrate the entire pipeline from raw ingestion to feature computation.
+
+    Check if the bronze and silver parquet files have already been generated.
+    If not, it runs the relative pipeline and logs the time of execution.
+
+    Args:
+        dataset_id (int): Target dataset identifier (1,2 or 3)
+    """
     while dataset_id < 1 or dataset_id > 3:
         dataset_id = click.prompt(
             "Please enter a valid target dataset_id (1,2 or 3)", type=int
