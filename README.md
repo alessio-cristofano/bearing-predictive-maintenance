@@ -4,6 +4,10 @@
 
 ## Overview
 A modular, end-to-end data engineering pipeline designed to ingest, process, and extract features from high-frequency sensor data. Built using the IMS Bearing dataset (20 kHz sampling rate, 1-second snapshots), this project transitions raw, multi-gigabyte ASCII test-to-failure records into highly compressed, analytical Parquet tables ready for machine learning.
+## Portfolio Case Studies
+Read the detailed technical breakdowns of my engineering decisions, architectural trade-offs, and pipeline performance:
+* [Phase 1 Case Study: Building a Local Lakehouse for Bearings Predictive Maintenance](./docs/phase1_case_study.md)
+* *Phase 2: Cloud Migration (In Progress)*
 
 ## Architecture & Tech Stack
 * **Language & Layout:** Python 3.11+ using a strict `src/` package layout.
@@ -17,12 +21,15 @@ A modular, end-to-end data engineering pipeline designed to ingest, process, and
 
 ## Quickstart
 ```bash
-# Clone and setup environment
+# Clone the repository
 git clone [https://github.com/alessio-cristofano/bearing-predictive-maintenance.git](https://github.com/alessio-cristofano/bearing-predictive-maintenance.git)
 cd bearing-predictive-maintenance
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
 
-# Run the pipeline for Dataset N (1,2 or 3)
-python3 -m src.run_pipeline --dataset-id <N>
+# Create the virtual environment and install dependencies
+make setup
+
+# Run the data quality tests
+make test
+
+# Execute the Medallion pipeline for the specified dataset_id (1,2 or 3). Default is 2.
+make run ID=<dataset_id>
