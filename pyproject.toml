@@ -24,3 +24,13 @@ ignore = [
     "DTZ001",  # datetime.datetime() called without a tzinfo argument
     "DTZ007",  # Naive datetime constructed using datetime.strptime() without %z
 ]
+select = [
+    "E", "W", "F", "I", "UP", 
+    "D",   # Enable docstring checks
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["D104"]
+"tests/*.py" = ["D"]
